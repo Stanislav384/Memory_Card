@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 from random import choice, shuffle 
 from time import sleep
 
-
 app = QApplication([])
 from main_window import *
+from menu_window import *
 
 class Question():
     def __init__(self, question, answer, wrong_answer1,wrong_answer2, wrong_answer3):
@@ -39,14 +39,14 @@ def new_question():
     cur_q = choice(questions)
     lb_Question.setText(cur_q.question)
     Correct.setText(cur_q.answer)
-
+    shuffle(radio_buttons)
+    
     radio_buttons[0].setText(cur_q.wrong_answer1)
     radio_buttons[1].setText(cur_q.wrong_answer2)
     radio_buttons[2].setText(cur_q.wrong_answer3)
     radio_buttons[3].setText(cur_q.answer)
 
 new_question()
-
 
 def check():
     RadioGroup.setExclusive(False)
@@ -60,6 +60,8 @@ def check():
     else:
         Result.setText('Не вірно!')
         cur_q.got_wrong()
+    RadioGroup.setExclusive(True)
+
 
 
 def click_ok():
@@ -67,7 +69,6 @@ def click_ok():
         check()
         RadioGroupBox.hide()
         AnsGroupBox.show()
-
         btn_OK.setText('Наступне запитання')
     else:
         new_question()
@@ -77,5 +78,14 @@ def click_ok():
         btn_OK.setText('Відповісти')
 
 btn_OK.clicked.connect(click_ok)
+
+def rest():
+    win_card.hide()
+    time = box_Minutes.value() * 60
+    sleep(time)
+    win_card.show()
+
+btn_sleep.clicked.connect(rest)
+
 
 app.exec_()
