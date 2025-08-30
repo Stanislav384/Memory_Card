@@ -6,6 +6,9 @@ app = QApplication([])
 from main_window import *
 from menu_window import *
 
+count_ask = 0
+count_right = 0
+
 class Question():
     def __init__(self, question, answer, wrong_answer1,wrong_answer2, wrong_answer3):
         self.question = question
@@ -14,15 +17,15 @@ class Question():
         self.wrong_answer2 = wrong_answer2
         self.wrong_answer3 = wrong_answer3
         self.isAsking = True 
-        self.count_ask = 0
-        self.count_right = 0
 
     def got_right(self):
-        self.count_ask += 1
-        self.count_right += 1
+        global count_ask, count_right
+        count_ask += 1
+        count_right += 1
 
     def got_wrong(self):
-        self.count_ask += 1
+        global count_ask
+        count_ask += 1
 
 q1 = Question("Яблуко", "apple", "application", "pinapple", "apply")
 q2 = Question('Дім', 'house', 'horse', 'hurry', 'hour')
@@ -62,7 +65,13 @@ def check():
         cur_q.got_wrong()
     RadioGroup.setExclusive(True)
 
+def rest():
+    win_card.hide()
+    time = box_Minutes.value() * 60
+    sleep(time)
+    win_card.show()
 
+btn_sleep.clicked.connect(rest)
 
 def click_ok():
     if btn_OK.text() == 'Відповісти':
@@ -79,13 +88,26 @@ def click_ok():
 
 btn_OK.clicked.connect(click_ok)
 
-def rest():
+def menu_generation():
+    if count_ask == 0:
+        c = 0
+    else:
+        c = (count_right / count_ask) * 100
+    
+    print(f"Разів відповіли: {count_ask}\n"
+          f"Вірних відповідей: {count_right}\n"
+          f"Успішність: {round(c, 2)}%"
+          )
+    menu_card.show()
     win_card.hide()
-    time = box_Minutes.value() * 60
-    sleep(time)
+    
+
+menu.clicked.connect(menu_generation)
+
+def back_win():
+    menu_card.hide()
     win_card.show()
 
-btn_sleep.clicked.connect(rest)
-
+back.clicked.connect(back_win)
 
 app.exec_()
