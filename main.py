@@ -4,7 +4,6 @@ from time import sleep
 
 app = QApplication([])
 from main_window import *
-from menu_window import *
 
 count_ask = 0
 count_right = 0
@@ -31,6 +30,8 @@ q1 = Question("Яблуко", "apple", "application", "pinapple", "apply")
 q2 = Question('Дім', 'house', 'horse', 'hurry', 'hour')
 q3 = Question('Миша', 'mouse', 'mouth', 'muse', 'museum')
 q4 = Question('Число', 'number', 'digit', 'amount', 'summary')
+
+
 
 
 
@@ -98,16 +99,9 @@ def menu_generation():
           f"Вірних відповідей: {count_right}\n"
           f"Успішність: {round(c, 2)}%"
           )
-    menu_card.show()
-    win_card.hide()
     
 
 menu.clicked.connect(menu_generation)
 
-def back_win():
-    menu_card.hide()
-    win_card.show()
-
-back.clicked.connect(back_win)
 
 app.exec_()
